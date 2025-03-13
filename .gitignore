@@ -1,0 +1,50 @@
+# Dependencias
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Archivos de compilación
+dist/
+build/
+*.tsbuildinfo
+
+# Archivos de entorno
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Archivos de Docker
+docker-compose.yml
+docker-compose.override.yml
+Dockerfile
+
+# Archivos de configuración sensibles
+src/configs/S3.config.ts
+
+# Logs
+logs/
+*.log
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de IDE
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos de prueba
+coverage/
+.nyc_output/
+
+# Archivos temporales
+tmp/
+temp/
+
+# Prisma
+prisma/.env
