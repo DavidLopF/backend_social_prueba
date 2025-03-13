@@ -1,44 +1,45 @@
-# Stage 1: Builder
 FROM node:18 AS builder
 
 WORKDIR /app
 
-# Copiar archivos de dependencias y configuración de Prisma
+# Copiar archivos de dependencias
 COPY package*.json ./
 COPY prisma ./prisma/
 
-# Instalar todas las dependencias (incluye devDependencies para compilar TypeScript)
+# Instalar todas las dependencias incluyendo devDependencies
 RUN npm ci
 
-# Reconstruir bcrypt para la arquitectura Linux
+# Reconstruir bcrypt para Linux
 RUN npm rebuild bcrypt --build-from-source
 
 # Generar Prisma Client
 RUN npx prisma generate
 
-# Copiar el resto de la aplicación
+# Copiar el resto de archivos y compilar
 COPY . .
-
-# Compilar el código TypeScript a JavaScript (asegúrate de tener un script "build" en package.json)
 RUN npm run build
 
-# Stage 2: Imagen de producción
-FROM node:18 AS production
+# Etapa de producción
+FROM node:18-slim
 
 WORKDIR /app
 
+# Copiar archivos necesarios
 COPY package*.json ./
+COPY prisma ./prisma/
 
+# Instalar solo dependencias de producción
 RUN npm ci --only=production
 
-COPY --from=builder /app/dist ./dist
+# Generar Prisma Client
+RUN npx prisma generate
 
-COPY --from=builder /app/prisma ./prisma
+# Copiar archivos compilados desde la etapa builder
+COPY --from=builder /app/dist ./dist
 
 EXPOSE 3000
 
-
 ENV NODE_ENV=production
 
-
+# Ejecutar la aplicación
 CMD ["npm", "start"]

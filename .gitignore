@@ -16,8 +16,6 @@ build/
 .env.test
 .env.production
 
-# Archivos de configuración sensibles
-src/configs/S3.config.ts
 
 # Logs
 logs/

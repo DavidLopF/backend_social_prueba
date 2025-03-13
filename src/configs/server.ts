@@ -8,6 +8,9 @@ import { getSingular } from "../utils/functions";
 import { success } from "../utils/logger";
 import colors from "colors";
 import { Server as HttpServer } from "http";
+import swaggerUi from 'swagger-ui-express';
+import swaggerJSDoc from 'swagger-jsdoc';
+import path from 'path';
 
 class Server {
   private app: Application;
@@ -19,6 +22,7 @@ class Server {
     this.app = express();
     this.port = process.env.PORT || "3000";
     this.middlewares();
+    this.setupSwagger();
     this.routes();
     this.handleShutdown();
   }
@@ -36,8 +40,46 @@ class Server {
     this.app.get("/", (_req, res) => {
       res.status(200).json({
         message: "API is running",
+        documentation: '/api-docs'
       });
     });
+  }
+
+  private setupSwagger():void {
+    const swaggerOptions = {
+      definition: {
+        openapi: '3.0.0',
+        info: {
+          title: 'Social Network API',
+          version: '1.0.0',
+          description: 'API documentation for Social Network',
+        },
+        servers: [
+          {
+            url: '/api',
+            description: 'API Server'
+          }
+        ],
+        components: {
+          securitySchemes: {
+            bearerAuth: {
+              type: 'http',
+              scheme: 'bearer',
+              bearerFormat: 'JWT',
+            },
+          },
+        },
+      },
+      apis: [path.join(__dirname, '../routes/*.ts'), path.join(__dirname, '../routes/*.js')],
+    };
+
+    const specs = swaggerJSDoc(swaggerOptions);
+    this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
+      explorer: true,
+      swaggerOptions: {
+        persistAuthorization: true,
+      }
+    }));
   }
 
   private routes(): void {

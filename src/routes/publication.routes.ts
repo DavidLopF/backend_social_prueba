@@ -8,6 +8,38 @@ const router = Router();
 
 /**
  * @swagger
+ * tags:
+ *   name: Publications
+ *   description: API endpoints para gestionar publicaciones
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Publication:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         title:
+ *           type: string
+ *         content:
+ *           type: string
+ *         image:
+ *           type: string
+ *         authorId:
+ *           type: integer
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ */
+
+/**
+ * @swagger
  * /publications:
  *   get:
  *     summary: Obtener todas las publicaciones
@@ -26,6 +58,19 @@ const router = Router();
  *     responses:
  *       200:
  *         description: Lista de publicaciones con paginación
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Publication'
  */
 router.get('/', PublicationController.getAllPublications);
 
