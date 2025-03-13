@@ -17,9 +17,9 @@ class ValidateParams {
           message: "Invalid params",
           data: errors.array(),
         };
-        res.status(400).json(response);
+        return res.status(400).json(response);
       }
-      next();
+      return next();
     } catch (error) {
       printError("Error validating params" + error);
       const response: IResponse = {
@@ -27,7 +27,7 @@ class ValidateParams {
         message: "Error validating params",
         data: null,
       };
-      res.status(500).send(response);
+      return res.status(500).json(response);
     }
   }
 }

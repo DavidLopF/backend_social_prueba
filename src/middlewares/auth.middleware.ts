@@ -23,40 +23,44 @@ class AuthMiddleware {
       const authHeader = req.headers.authorization;
       
       if (!authHeader) {
-        return res.status(401).json({
+        res.status(401).json({
           success: false,
           message: "No token provided",
           data: null
         });
+        return;
       }
       
       const parts = authHeader.split(" ");
       
       if (parts.length !== 2) {
-        return res.status(401).json({
+        res.status(401).json({
           success: false,
           message: "Token error",
           data: null
         });
+        return;
       }
       
       const [scheme, token] = parts;
       
       if (!/^Bearer$/i.test(scheme)) {
-        return res.status(401).json({
+        res.status(401).json({
           success: false,
           message: "Token malformatted",
           data: null
         });
+        return;
       }
       
       jwt.verify(token, process.env.JWT_SECRET || "secret", (err, decoded) => {
         if (err) {
-          return res.status(401).json({
+          res.status(401).json({
             success: false,
             message: "Invalid token",
             data: null
           });
+          return;
         }
         
         // Guardar el id del usuario en el request para uso posterior
@@ -66,7 +70,7 @@ class AuthMiddleware {
       });
     } catch (error) {
       printError("Error validating token: " + error);
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message: "Error validating token",
         data: null
