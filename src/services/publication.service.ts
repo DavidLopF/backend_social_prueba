@@ -133,7 +133,11 @@ class PublicationService {
                 data: publication
             };
         } catch (error) {
-            throw new Error("Error creating publication: " + error);
+            return {
+                success: false,
+                message: "Error creating publication",
+                data: null
+            };
         }
     }
 
@@ -163,7 +167,11 @@ class PublicationService {
                 }
             };
         } catch (error) {
-            throw new Error("Error retrieving publications: " + error);
+            return {
+                success: false,
+                message: "Error retrieving publications",
+                data: null
+            };
         }
     }
 
@@ -175,7 +183,11 @@ class PublicationService {
             const publication = await PublicationRepository.getPublicationById(id);
 
             if (!publication) {
-                throw new Error('Publication not found');
+                return {
+                    success: false,
+                    message: "Publication not found",
+                    data: null
+                };
             }
 
             return {
@@ -184,7 +196,11 @@ class PublicationService {
                 data: publication
             };
         } catch (error) {
-            throw new Error("Error retrieving publication: " + error);
+            return {
+                success: false,
+                message: "Error retrieving publication",
+                data: null
+            };
         }
     }
 
@@ -197,7 +213,11 @@ class PublicationService {
             const publication = await PublicationRepository.getPublicationById(id);
 
             if (!publication) {
-                throw new Error('Publication not found');
+                return {
+                    success: false,
+                    message: "Publication not found",
+                    data: null
+                };
             }
 
             // Verificar que el usuario sea el autor de la publicación
@@ -217,7 +237,11 @@ class PublicationService {
                 data: updatedPublication
             };
         } catch (error) {
-            throw new Error("Error updating publication: " + error);
+            return {
+                success: false,
+                message: "Error updating publication",
+                data: null
+            };
         }
     }
 
@@ -229,7 +253,11 @@ class PublicationService {
             const publication = await PublicationRepository.getPublicationById(id);
 
             if (!publication) {
-                throw new Error('Publication not found');
+                return {
+                    success: false,
+                    message: "Publication not found",
+                    data: null
+                };
             }
 
             if (publication.authorId !== userId) {
@@ -252,7 +280,11 @@ class PublicationService {
                 data: null
             };
         } catch (error) {
-            throw new Error("Error deleting publication: " + error);
+            return {
+                success: false,
+                message: "Error deleting publication",
+                data: null
+            };
         }
     }
 
@@ -284,7 +316,11 @@ class PublicationService {
                 }
             };
         } catch (error) {
-            throw new Error("Error retrieving publications: " + error);
+            return {
+                success: false,
+                message: "Error retrieving publications",
+                data: null
+            };
         }
     }
 
@@ -296,7 +332,11 @@ class PublicationService {
             const publication = await PublicationRepository.getPublicationById(publicationId);
 
             if (!publication) {
-                throw new Error('Publication not found');
+                return {
+                    success: false,
+                    message: "Publication not found",
+                    data: null
+                };
             }
 
             const comment = await prisma.comment.create({
@@ -322,7 +362,11 @@ class PublicationService {
                 data: comment
             };
         } catch (error) {
-            throw new Error("Error adding comment: " + error);
+            return {
+                success: false,
+                message: "Error adding comment",
+                data: null
+            };
         }
     }
 
@@ -371,7 +415,11 @@ class PublicationService {
                 }
             };
         } catch (error) {
-            throw new Error("Error retrieving comments: " + error);
+            return {
+                success: false,
+                message: "Error retrieving comments",
+                data: null
+            };
         }
     }
 
@@ -383,7 +431,11 @@ class PublicationService {
             const publication = await PublicationRepository.getPublicationById(publicationId);
 
             if (!publication) {
-                throw new Error('Publication not found');
+                return {
+                    success: false,
+                    message: "Publication not found",
+                    data: null
+                };
             }
 
             const existingLike = await prisma.like.findUnique({
@@ -425,7 +477,11 @@ class PublicationService {
                 data: { liked: true }
             };
         } catch (error) {
-            throw new Error("Error toggling like: " + error);
+            return {
+                success: false,
+                message: "Error toggling like",
+                data: null
+            };
         }
     }
 
@@ -474,7 +530,11 @@ class PublicationService {
                 }
             };
         } catch (error) {
-            throw new Error("Error retrieving likes: " + error);
+            return {
+                success: false,
+                message: "Error retrieving likes",
+                data: null
+            };
         }
     }
 }

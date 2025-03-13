@@ -228,14 +228,15 @@ class PublicationController {
           message: "Unauthorized",
           data: null
         });
-      } else {
-        const response = await PublicationService.addComment(
-          parseInt(id),
-          userId,
-          content
-        );
-        res.status(201).json(response);
+        return;
       }
+
+      const response = await PublicationService.addComment(
+        parseInt(id),
+        userId,
+        content
+      );
+      res.status(201).json(response);
     } catch (error) {
       printError("Error in addComment controller: " + error);
       res.status(500).json({
@@ -286,13 +287,14 @@ class PublicationController {
           message: "Unauthorized",
           data: null
         });
-      } else {
-        const response = await PublicationService.toggleLike(
-          parseInt(id),
-          userId
-        );
-        res.status(200).json(response);
+        return;
       }
+
+      const response = await PublicationService.toggleLike(
+        parseInt(id),
+        userId
+      );
+      res.status(200).json(response);
     } catch (error) {
       printError("Error in toggleLike controller: " + error);
       res.status(500).json({
