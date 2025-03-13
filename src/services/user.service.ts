@@ -1,40 +1,36 @@
-import { UserRepository } from '../repositories/user.repository';
-import { UserCreateInput, UserUpdateInput } from '../types/prisma.types';
-import { UserResponse, UserWithPassword } from '../types/user.types';
+import UserRepository from '../repositories/user.repository';
+import { IUser, IResponse } from '../model/interfaces';
 import bcrypt from 'bcrypt';
 
-export class UserService {
-    private userRepository: UserRepository;
-
-    constructor() {
-        this.userRepository = new UserRepository();
+class UserService {
+    async findById(id: number): Promise<IUser | null> {
+        return UserRepository.findUserById(id);
     }
 
-    async create(data: UserCreateInput): Promise<UserWithPassword> {
-        return this.userRepository.create({
+    async findByEmail(email: string): Promise<IUser | null> {
+        return UserRepository.findUserByEmail(email);
+    }
+
+    async create(data: Omit<IUser, 'id' | 'createdAt' | 'updatedAt'>): Promise<IUser> {
+        const hashedPassword = await bcrypt.hash(data.password, 10);
+        return UserRepository.createUser({
             ...data,
-            password: await bcrypt.hash(data.password, 10)
+            password: hashedPassword
         });
     }
 
-    async findByEmail(email: string): Promise<UserWithPassword | null> {
-        return this.userRepository.findByEmail(email);
-    }
-
-    async findById(id: string): Promise<UserWithPassword | null> {
-        return this.userRepository.findById(id);
-    }
-
-    async update(id: string, data: UserUpdateInput): Promise<UserWithPassword> {
+    async update(id: number, data: Partial<IUser>): Promise<IUser> {
         if (data.password) {
             data.password = await bcrypt.hash(data.password, 10);
         }
-        return this.userRepository.update(id, data);
+        return UserRepository.updateUser(id, data);
     }
 
-    // Método auxiliar para convertir a UserResponse (sin contraseña)
-    toUserResponse(user: UserWithPassword): UserResponse {
+    // Método auxiliar para convertir a respuesta sin contraseña
+    toUserResponse(user: IUser): Omit<IUser, 'password'> {
         const { password, ...userResponse } = user;
         return userResponse;
     }
-} 
+}
+
+export default new UserService(); 

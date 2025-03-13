@@ -13,13 +13,21 @@ class AuthService {
       const user = await UserRepository.findUserByEmail(email);
       
       if (!user) {
-        throw new Error('User not found');
+        return {
+          success: false,
+          message: "Invalid credentials",
+          data: null
+        };
       }
     
       const isPasswordValid = await bcrypt.compare(password, user.password);
       
       if (!isPasswordValid) {
-        throw new Error('Invalid credentials');
+        return {
+          success: false,
+          message: "Invalid credentials",
+          data: null
+        };
       }
     
       const token = jwt.sign(
@@ -42,7 +50,11 @@ class AuthService {
         }
       };
     } catch (error) {
-      throw new Error("Error in login service: " + error);
+      return {
+        success: false,
+        message: "Error in login service",
+        data: null
+      };
     }
   }
 
@@ -104,7 +116,11 @@ class AuthService {
           data: null
         };
       }
-      throw new Error("Error in register service: " + error);
+      return {
+        success: false,
+        message: "Error in register service",
+        data: null
+      };
     }
   }
 
@@ -121,7 +137,11 @@ class AuthService {
       const user = await UserRepository.findUserById(userId);
       
       if (!user) {
-        throw new Error('User not found');
+        return {
+          success: false,
+          message: "User not found",
+          data: null
+        };
       }
 
       const updateData: any = { ...data };
@@ -168,7 +188,11 @@ class AuthService {
           data: null
         };
       }
-      throw new Error("Error updating user: " + error);
+      return {
+        success: false,
+        message: "Error updating user",
+        data: null
+      };
     }
   }
 }

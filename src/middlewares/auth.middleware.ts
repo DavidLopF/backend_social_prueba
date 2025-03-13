@@ -23,27 +23,27 @@ class AuthMiddleware {
       const authHeader = req.headers.authorization;
       
       if (!authHeader) {
-         res.status(401).json({
+        return res.status(401).json({
           success: false,
           message: "No token provided",
           data: null
         });
       }
       
-      const parts = authHeader?.split(" ");
+      const parts = authHeader.split(" ");
       
-      if (parts?.length !== 2) {
-         res.status(401).json({
+      if (parts.length !== 2) {
+        return res.status(401).json({
           success: false,
           message: "Token error",
           data: null
         });
       }
       
-      const [scheme, token] = parts || [];
+      const [scheme, token] = parts;
       
       if (!/^Bearer$/i.test(scheme)) {
-         res.status(401).json({
+        return res.status(401).json({
           success: false,
           message: "Token malformatted",
           data: null
@@ -52,7 +52,7 @@ class AuthMiddleware {
       
       jwt.verify(token, process.env.JWT_SECRET || "secret", (err, decoded) => {
         if (err) {
-           res.status(401).json({
+          return res.status(401).json({
             success: false,
             message: "Invalid token",
             data: null
@@ -62,11 +62,11 @@ class AuthMiddleware {
         // Guardar el id del usuario en el request para uso posterior
         req.user = { id: (decoded as any).id };
         
-         next();
+        next();
       });
     } catch (error) {
       printError("Error validating token: " + error);
-       res.status(500).json({
+      return res.status(500).json({
         success: false,
         message: "Error validating token",
         data: null
