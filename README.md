@@ -183,6 +183,3 @@ AWS_ENDPOINT=https://nombre_bucket.s3.us-east-1.amazonaws.com
 4. Haz push a la rama (`git push origin feature/amazing-feature`)
 5. Abre un Pull Request
 
-## Licencia
-
-Este proyecto está licenciado bajo [MIT License](LICENSE).
